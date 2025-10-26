@@ -81,18 +81,19 @@ const LanguageConverter = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4 md:p-8 space-y-6">
+    <div className="w-full max-w-6xl mx-auto p-3 sm:p-4 md:p-8 space-y-4 md:space-y-6">
       {/* Language Selector */}
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-center gap-2 sm:gap-3 flex-wrap">
         {languageOptions.map((option) => (
           <Button
             key={option.value}
             onClick={() => setSelectedLanguage(option.value)}
             variant={selectedLanguage === option.value ? "default" : "outline"}
+            size="sm"
             className={
               selectedLanguage === option.value
-                ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant font-medium"
-                : "hover:bg-muted font-medium"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant font-medium text-xs sm:text-sm md:text-base"
+                : "hover:bg-muted font-medium text-xs sm:text-sm md:text-base"
             }
           >
             {option.label}
@@ -101,15 +102,15 @@ const LanguageConverter = () => {
       </div>
 
       {/* Converter Cards */}
-      <div className="grid md:grid-cols-2 gap-6 items-start">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-6 items-start">
         {/* Input Card */}
-        <Card className="p-6 space-y-4 shadow-elegant transition-shadow hover:shadow-glow">
+        <Card className="p-4 sm:p-5 md:p-6 space-y-3 md:space-y-4 shadow-elegant transition-shadow hover:shadow-glow">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">
               {selectedLanguage === "benglish-bangla" ? "Benglish" : "Hinglish"}
             </h2>
-            <span className="text-sm text-muted-foreground">
-              {inputText.length} characters
+            <span className="text-xs sm:text-sm text-muted-foreground">
+              {inputText.length}
             </span>
           </div>
           <Textarea
@@ -121,15 +122,15 @@ const LanguageConverter = () => {
                 ? "Type in Benglish... (e.g., Ami tomake bhalobashi)\nPress Enter to convert"
                 : "Type in Hinglish... (e.g., Main tumse pyar karta hoon)\nPress Enter to convert"
             }
-            className="min-h-[200px] text-base resize-none border-border focus:ring-primary"
+            className="min-h-[150px] sm:min-h-[180px] md:min-h-[200px] text-sm sm:text-base resize-none border-border focus:ring-primary"
             disabled={isLoading}
           />
         </Card>
 
         {/* Output Card */}
-        <Card className="p-6 space-y-4 shadow-elegant transition-shadow hover:shadow-glow">
+        <Card className="p-4 sm:p-5 md:p-6 space-y-3 md:space-y-4 shadow-elegant transition-shadow hover:shadow-glow">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">
               {selectedLanguage === "benglish-bangla" ? "বাংলা" : "हिंदी"}
             </h2>
             {outputText && (
@@ -137,16 +138,16 @@ const LanguageConverter = () => {
                 variant="ghost"
                 size="sm"
                 onClick={handleCopy}
-                className="hover:bg-muted"
+                className="hover:bg-muted h-8 px-2 sm:px-3"
               >
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
+                <Copy className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Copy</span>
               </Button>
             )}
           </div>
-          <div className="min-h-[200px] p-4 bg-muted rounded-md text-base whitespace-pre-wrap">
+          <div className="min-h-[150px] sm:min-h-[180px] md:min-h-[200px] p-3 sm:p-4 bg-muted rounded-md text-sm sm:text-base whitespace-pre-wrap break-words">
             {outputText || (
-              <span className="text-muted-foreground">
+              <span className="text-muted-foreground text-xs sm:text-sm">
                 Converted text will appear here...
               </span>
             )}
@@ -160,17 +161,17 @@ const LanguageConverter = () => {
           onClick={handleConvert}
           disabled={isLoading || !inputText.trim()}
           size="lg"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant px-8 transition-all font-semibold"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant px-6 sm:px-8 transition-all font-semibold text-sm sm:text-base w-full sm:w-auto"
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 animate-spin" />
               Converting...
             </>
           ) : (
             <>
               Convert
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
             </>
           )}
         </Button>
