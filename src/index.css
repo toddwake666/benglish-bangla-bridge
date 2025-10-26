@@ -8,83 +8,83 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 189 94% 43%;
+    --primary: 24 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 189 94% 55%;
+    --primary-glow: 24 100% 60%;
 
-    --secondary: 280 80% 65%;
+    --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 94%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 320 85% 65%;
+    --accent: 24 100% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 189 94% 43%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 24 100% 50%;
 
     --radius: 0.75rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(189 94% 43%), hsl(280 80% 65%));
-    --gradient-accent: linear-gradient(135deg, hsl(280 80% 65%), hsl(320 85% 65%));
-    --gradient-subtle: linear-gradient(180deg, hsl(210 20% 98%), hsl(189 94% 98%));
+    --gradient-primary: linear-gradient(135deg, hsl(24 100% 50%), hsl(0 0% 0%));
+    --gradient-accent: linear-gradient(135deg, hsl(0 0% 0%), hsl(24 100% 50%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
 
-    --shadow-elegant: 0 10px 30px -10px hsl(189 94% 43% / 0.2);
-    --shadow-glow: 0 0 40px hsl(189 94% 55% / 0.15);
+    --shadow-elegant: 0 10px 30px -10px hsl(24 100% 50% / 0.3);
+    --shadow-glow: 0 0 40px hsl(24 100% 50% / 0.2);
 
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 10%;
+    --foreground: 0 0% 100%;
 
-    --card: 222 47% 15%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222 47% 15%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 189 94% 50%;
-    --primary-foreground: 222 47% 11%;
-    --primary-glow: 189 94% 60%;
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --primary-glow: 24 100% 60%;
 
-    --secondary: 280 80% 70%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 320 85% 70%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 189 94% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 24 100% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(189 94% 50%), hsl(280 80% 70%));
-    --gradient-accent: linear-gradient(135deg, hsl(280 80% 70%), hsl(320 85% 70%));
-    --gradient-subtle: linear-gradient(180deg, hsl(222 47% 11%), hsl(222 47% 15%));
+    --gradient-primary: linear-gradient(135deg, hsl(24 100% 50%), hsl(0 0% 0%));
+    --gradient-accent: linear-gradient(135deg, hsl(0 0% 100%), hsl(24 100% 50%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 10%), hsl(0 0% 15%));
 
-    --shadow-elegant: 0 10px 30px -10px hsl(189 94% 50% / 0.3);
-    --shadow-glow: 0 0 40px hsl(189 94% 60% / 0.2);
+    --shadow-elegant: 0 10px 30px -10px hsl(24 100% 50% / 0.4);
+    --shadow-glow: 0 0 40px hsl(24 100% 50% / 0.3);
   }
 }
 
@@ -94,6 +94,6 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-poppins;
   }
 }

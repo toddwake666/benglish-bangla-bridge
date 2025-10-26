@@ -55,6 +55,13 @@ const LanguageConverter = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleConvert();
+    }
+  };
+
   const handleCopy = async () => {
     if (!outputText) return;
     
@@ -84,8 +91,8 @@ const LanguageConverter = () => {
             variant={selectedLanguage === option.value ? "default" : "outline"}
             className={
               selectedLanguage === option.value
-                ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90 shadow-elegant"
-                : ""
+                ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant font-medium"
+                : "hover:bg-muted font-medium"
             }
           >
             {option.label}
@@ -108,10 +115,11 @@ const LanguageConverter = () => {
           <Textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder={
               selectedLanguage === "benglish-bangla"
-                ? "Type in Benglish... (e.g., Ami tomake bhalobashi)"
-                : "Type in Hinglish... (e.g., Main tumse pyar karta hoon)"
+                ? "Type in Benglish... (e.g., Ami tomake bhalobashi)\nPress Enter to convert"
+                : "Type in Hinglish... (e.g., Main tumse pyar karta hoon)\nPress Enter to convert"
             }
             className="min-h-[200px] text-base resize-none border-border focus:ring-primary"
             disabled={isLoading}
@@ -152,7 +160,7 @@ const LanguageConverter = () => {
           onClick={handleConvert}
           disabled={isLoading || !inputText.trim()}
           size="lg"
-          className="bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90 shadow-elegant px-8 transition-all"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-elegant px-8 transition-all font-semibold"
         >
           {isLoading ? (
             <>
