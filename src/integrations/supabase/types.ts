@@ -14,13 +14,52 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_credits: {
+        Row: {
+          created_at: string | null
+          credits_remaining: number
+          daily_limit: number
+          id: string
+          last_reset_date: string
+          total_credits_used: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          credits_remaining?: number
+          daily_limit?: number
+          id?: string
+          last_reset_date?: string
+          total_credits_used?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          credits_remaining?: number
+          daily_limit?: number
+          id?: string
+          last_reset_date?: string
+          total_credits_used?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_and_reset_user_credits: {
+        Args: { p_user_id: string }
+        Returns: {
+          credits_remaining: number
+          was_reset: boolean
+        }[]
+      }
+      reset_daily_credits: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

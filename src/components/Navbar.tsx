@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { LogOut, User as UserIcon, Coins } from "lucide-react";
 import { getUserCredits } from "@/services/creditsService";
+import { supabase } from "@/integrations/supabase/client";
 
 interface NavbarProps {
   user: User;
@@ -43,7 +44,30 @@ const Navbar = ({ user, onSignOut, creditsRefreshTrigger }: NavbarProps) => {
     };
 
     fetchCredits();
-  }, [creditsRefreshTrigger]);
+
+    // Subscribe to realtime updates for user credits
+    const channel = supabase
+      .channel('navbar-credits-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'user_credits',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Navbar credits updated:', payload);
+          // @ts-ignore
+          setCredits(payload.new.credits_remaining);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [creditsRefreshTrigger, user.id]);
 
   return (
     <header className="pt-6 md:pt-12 pb-6 md:pb-8 border-b border-border">

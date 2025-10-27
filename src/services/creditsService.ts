@@ -56,7 +56,8 @@ export const getUserCredits = async (): Promise<UserCredits | null> => {
   }
 };
 
-export const deductCredits = async (amount: number): Promise<boolean> => {
+export const deductCreditsForCharacters = async (characterCount: number): Promise<boolean> => {
+  const amount = characterCount; // 1 credit per character
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -108,7 +109,8 @@ export const deductCredits = async (amount: number): Promise<boolean> => {
   return true;
 };
 
-export const checkSufficientCredits = async (requiredAmount: number): Promise<boolean> => {
+export const checkSufficientCreditsForCharacters = async (characterCount: number): Promise<boolean> => {
   const credits = await getUserCredits();
-  return credits ? credits.credits_remaining >= requiredAmount : false;
+  const requiredCredits = characterCount; // 1 credit per character
+  return credits ? credits.credits_remaining >= requiredCredits : false;
 };

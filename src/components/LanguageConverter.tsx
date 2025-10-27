@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, ArrowRight, Loader2, Coins } from "lucide-react";
-import { getUserCredits, deductCredits, checkSufficientCredits } from "@/services/creditsService";
+import { getUserCredits, deductCreditsForCharacters, checkSufficientCreditsForCharacters } from "@/services/creditsService";
 
 type LanguagePair = "benglish-bangla" | "hinglish-hindi";
 
@@ -19,6 +19,37 @@ const LanguageConverter = () => {
 
   useEffect(() => {
     loadCredits();
+
+    // Subscribe to realtime updates for user credits
+    const setupRealtime = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        const channel = supabase
+          .channel('user-credits-changes')
+          .on(
+            'postgres_changes',
+            {
+              event: 'UPDATE',
+              schema: 'public',
+              table: 'user_credits',
+              filter: `user_id=eq.${user.id}`
+            },
+            (payload) => {
+              console.log('Credits updated:', payload);
+              // @ts-ignore
+              setCreditsRemaining(payload.new.credits_remaining);
+            }
+          )
+          .subscribe();
+
+        return () => {
+          supabase.removeChannel(channel);
+        };
+      }
+    };
+
+    setupRealtime();
   }, []);
 
   const loadCredits = async () => {
@@ -47,15 +78,15 @@ const LanguageConverter = () => {
       return;
     }
 
-    const CONVERSION_COST = 1;
+    const characterCount = inputText.length;
 
     setIsLoading(true);
     try {
-      const hasCredits = await checkSufficientCredits(CONVERSION_COST);
+      const hasCredits = await checkSufficientCreditsForCharacters(characterCount);
       if (!hasCredits) {
         toast({
           title: "Insufficient credits",
-          description: "You don't have enough credits. They reset daily.",
+          description: `You need ${characterCount} credits but only have ${creditsRemaining || 0}. Credits reset daily at midnight UTC.`,
           variant: "destructive",
         });
         setIsLoading(false);
@@ -68,7 +99,7 @@ const LanguageConverter = () => {
 
       if (error) throw error;
 
-      const deducted = await deductCredits(CONVERSION_COST);
+      const deducted = await deductCreditsForCharacters(characterCount);
       if (deducted) {
         await loadCredits();
       }
@@ -76,7 +107,7 @@ const LanguageConverter = () => {
       setOutputText(data.convertedText);
       toast({
         title: "Conversion successful",
-        description: "Your text has been converted!",
+        description: `Converted! Used ${characterCount} credits.`,
       });
     } catch (error) {
       console.error("Conversion error:", error);
@@ -153,7 +184,7 @@ const LanguageConverter = () => {
               {selectedLanguage === "benglish-bangla" ? "Benglish" : "Hinglish"}
             </h2>
             <span className="text-xs sm:text-sm text-muted-foreground">
-              {inputText.length}
+              {inputText.length} {inputText.length === 1 ? 'character' : 'characters'} = {inputText.length} {inputText.length === 1 ? 'credit' : 'credits'}
             </span>
           </div>
           <Textarea
