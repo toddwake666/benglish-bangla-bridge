@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Copy, ArrowRight, Loader2 } from "lucide-react";
+import { Copy, ArrowRight, Loader2, Coins } from "lucide-react";
+import { getUserCredits, deductCredits, checkSufficientCredits } from "@/services/creditsService";
 
 type LanguagePair = "benglish-bangla" | "hinglish-hindi";
 
@@ -13,7 +14,23 @@ const LanguageConverter = () => {
   const [outputText, setOutputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<LanguagePair>("benglish-bangla");
+  const [creditsRemaining, setCreditsRemaining] = useState<number | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    loadCredits();
+  }, []);
+
+  const loadCredits = async () => {
+    try {
+      const credits = await getUserCredits();
+      if (credits) {
+        setCreditsRemaining(credits.credits_remaining);
+      }
+    } catch (error) {
+      console.error("Failed to load credits:", error);
+    }
+  };
 
   const languageOptions = [
     { value: "benglish-bangla" as LanguagePair, label: "Benglish → বাংলা" },
@@ -30,13 +47,31 @@ const LanguageConverter = () => {
       return;
     }
 
+    const CONVERSION_COST = 1;
+
     setIsLoading(true);
     try {
+      const hasCredits = await checkSufficientCredits(CONVERSION_COST);
+      if (!hasCredits) {
+        toast({
+          title: "Insufficient credits",
+          description: "You don't have enough credits. They reset daily.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke("convert-script", {
         body: { text: inputText, languagePair: selectedLanguage },
       });
 
       if (error) throw error;
+
+      const deducted = await deductCredits(CONVERSION_COST);
+      if (deducted) {
+        await loadCredits();
+      }
 
       setOutputText(data.convertedText);
       toast({
@@ -82,6 +117,14 @@ const LanguageConverter = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-3 sm:p-4 md:p-8 space-y-4 md:space-y-6">
+      {/* Credits Display */}
+      {creditsRemaining !== null && (
+        <div className="flex justify-center items-center gap-2 text-sm text-muted-foreground">
+          <Coins className="w-4 h-4" />
+          <span>{creditsRemaining} credits remaining</span>
+        </div>
+      )}
+
       {/* Language Selector */}
       <div className="flex justify-center gap-2 sm:gap-3 flex-wrap">
         {languageOptions.map((option) => (
