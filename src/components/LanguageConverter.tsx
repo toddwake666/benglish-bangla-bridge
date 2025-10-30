@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Copy, ArrowRight, Loader2, Coins } from "lucide-react";
 import { getUserCredits, deductCreditsForCharacters, checkSufficientCreditsForCharacters } from "@/services/creditsService";
 
-type LanguagePair = "benglish-bangla" | "hinglish-hindi";
+type LanguagePair = "benglish-bangla" | "hinglish-hindi" | "benglish-english" | "hinglish-english";
 
 const LanguageConverter = () => {
   const [inputText, setInputText] = useState("");
@@ -66,6 +66,8 @@ const LanguageConverter = () => {
   const languageOptions = [
     { value: "benglish-bangla" as LanguagePair, label: "Benglish → বাংলা" },
     { value: "hinglish-hindi" as LanguagePair, label: "Hinglish → हिंदी" },
+    { value: "benglish-english" as LanguagePair, label: "Benglish → English" },
+    { value: "hinglish-english" as LanguagePair, label: "Hinglish → English" },
   ];
 
   const handleConvert = async () => {
@@ -181,7 +183,7 @@ const LanguageConverter = () => {
         <Card className="p-4 sm:p-5 md:p-6 space-y-3 md:space-y-4 shadow-elegant transition-shadow hover:shadow-glow">
           <div className="flex justify-between items-center">
             <h2 className="text-base sm:text-lg font-semibold text-foreground">
-              {selectedLanguage === "benglish-bangla" ? "Benglish" : "Hinglish"}
+              {selectedLanguage.startsWith("benglish") ? "Benglish" : "Hinglish"}
             </h2>
             <span className="text-xs sm:text-sm text-muted-foreground">
               {inputText.length} {inputText.length === 1 ? 'character' : 'characters'} = {inputText.length} {inputText.length === 1 ? 'credit' : 'credits'}
@@ -192,7 +194,7 @@ const LanguageConverter = () => {
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={
-              selectedLanguage === "benglish-bangla"
+              selectedLanguage.startsWith("benglish")
                 ? "Type in Benglish... (e.g., Ami tomake bhalobashi)\nPress Enter to convert"
                 : "Type in Hinglish... (e.g., Main tumse pyar karta hoon)\nPress Enter to convert"
             }
@@ -205,7 +207,7 @@ const LanguageConverter = () => {
         <Card className="p-4 sm:p-5 md:p-6 space-y-3 md:space-y-4 shadow-elegant transition-shadow hover:shadow-glow">
           <div className="flex justify-between items-center">
             <h2 className="text-base sm:text-lg font-semibold text-foreground">
-              {selectedLanguage === "benglish-bangla" ? "বাংলা" : "हिंदी"}
+              {selectedLanguage === "benglish-bangla" ? "বাংলা" : selectedLanguage === "hinglish-hindi" ? "हिंदी" : "English"}
             </h2>
             {outputText && (
               <Button

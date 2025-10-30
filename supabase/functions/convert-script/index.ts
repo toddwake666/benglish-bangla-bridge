@@ -5,6 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+type LanguagePair = "benglish-bangla" | "hinglish-hindi" | "benglish-english" | "hinglish-english";
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -22,12 +24,14 @@ serve(async (req) => {
       throw new Error('Text and language pair are required');
     }
 
-    const systemPrompts = {
+    const systemPrompts: Record<LanguagePair, string> = {
       'benglish-bangla': `You are a Benglish to Bangla script converter. Convert Bengali words written in English/Latin letters into proper Bangla script. DO NOT translate English words - keep them as-is. Only convert Bengali words that are written using English letters into Bangla script. Preserve all punctuation, tone, structure, and formatting exactly as given. Handle informal, poetic, or conversational text naturally.`,
-      'hinglish-hindi': `You are a Hinglish to Hindi script converter. Convert Hindi words written in English/Latin letters into proper Devanagari/Hindi script. DO NOT translate English words - keep them as-is. Only convert Hindi words that are written using English letters into Hindi script. Preserve all punctuation, tone, structure, and formatting exactly as given. Handle informal, poetic, or conversational text naturally.`
+      'hinglish-hindi': `You are a Hinglish to Hindi script converter. Convert Hindi words written in English/Latin letters into proper Devanagari/Hindi script. DO NOT translate English words - keep them as-is. Only convert Hindi words that are written using English letters into Hindi script. Preserve all punctuation, tone, structure, and formatting exactly as given. Handle informal, poetic, or conversational text naturally.`,
+      'benglish-english': `You are a Benglish to English translator. Translate Bengali words (written in English/Latin letters) into proper English. Keep any actual English words as-is. Preserve all punctuation, tone, structure, and formatting exactly as given. Handle informal, poetic, or conversational text naturally.`,
+      'hinglish-english': `You are a Hinglish to English translator. Translate Hindi words (written in English/Latin letters) into proper English. Keep any actual English words as-is. Preserve all punctuation, tone, structure, and formatting exactly as given. Handle informal, poetic, or conversational text naturally.`
     };
 
-    const systemPrompt = systemPrompts[languagePair as keyof typeof systemPrompts] || systemPrompts['benglish-bangla'];
+    const systemPrompt = systemPrompts[languagePair as LanguagePair] || systemPrompts['benglish-bangla'];
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`,
