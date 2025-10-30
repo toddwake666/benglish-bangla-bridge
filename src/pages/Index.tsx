@@ -54,7 +54,14 @@ const Index = () => {
       </main>
 
       <footer className="text-center py-6 md:py-8 text-xs md:text-sm text-muted-foreground">
-        <p>Powered by Google Gemini AI</p>
+        <a 
+          href="https://x.com/shuvodip99" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:text-foreground transition-colors"
+        >
+          @shuvodip99
+        </a>
       </footer>
     </div>
   );
