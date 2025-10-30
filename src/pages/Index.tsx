@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import LanguageConverter from "@/components/LanguageConverter";
 import Navbar from "@/components/Navbar";
+import { Twitter } from "lucide-react";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -58,8 +59,9 @@ const Index = () => {
           href="https://x.com/shuvodip99" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors"
+          className="hover:text-foreground transition-colors inline-flex items-center gap-2"
         >
+          <Twitter className="w-4 h-4" />
           @shuvodip99
         </a>
       </footer>
